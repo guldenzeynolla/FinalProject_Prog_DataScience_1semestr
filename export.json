@@ -1,0 +1,114 @@
+{
+  "filename": "Blue Purple Futuristic Modern 3D Tech Company Business Presentation.pdf",
+  "page_data": [
+    {
+      "page": 0,
+      "image_url": "https://nnts.imgix.net/uploadedfiles/rawocr/1394efe8-098f-4ed4-9e49-6f18f0ffa0f1-1.jpeg?auto=compress&expires=1705773145&or=0&s=85151761429ac6246254090ba8987d3a",
+      "size": {
+        "width": 6000,
+        "height": 3375
+      },
+      "words": [
+        {
+          "text": "Zevnolla",
+          "xmin": 992,
+          "ymin": 1437,
+          "xmax": 3122,
+          "ymax": 1852
+        },
+        {
+          "text": "Giulden",
+          "xmin": 3324,
+          "ymin": 1468,
+          "xmax": 5005,
+          "ymax": 1798
+        },
+        {
+          "text": "Fi",
+          "xmin": 1354,
+          "ymin": 2038,
+          "xmax": 1428,
+          "ymax": 2117
+        },
+        {
+          "text": "inal",
+          "xmin": 1420,
+          "ymin": 2038,
+          "xmax": 1599,
+          "ymax": 2117
+        },
+        {
+          "text": "project",
+          "xmin": 1648,
+          "ymin": 2038,
+          "xmax": 2024,
+          "ymax": 2135
+        },
+        {
+          "text": "on",
+          "xmin": 2061,
+          "ymin": 2062,
+          "xmax": 2189,
+          "ymax": 2120
+        },
+        {
+          "text": "the",
+          "xmin": 2229,
+          "ymin": 2039,
+          "xmax": 2407,
+          "ymax": 2120
+        },
+        {
+          "text": "subi",
+          "xmin": 2390,
+          "ymin": 2038,
+          "xmax": 2656,
+          "ymax": 2122
+        },
+        {
+          "text": "iect",
+          "xmin": 2632,
+          "ymin": 2038,
+          "xmax": 2840,
+          "ymax": 2130
+        },
+        {
+          "text": "\"Programmi",
+          "xmin": 2878,
+          "ymin": 2038,
+          "xmax": 3531,
+          "ymax": 2141
+        },
+        {
+          "text": "ing",
+          "xmin": 3523,
+          "ymin": 2038,
+          "xmax": 3683,
+          "ymax": 2138
+        },
+        {
+          "text": "for",
+          "xmin": 3723,
+          "ymin": 2039,
+          "xmax": 3870,
+          "ymax": 2121
+        },
+        {
+          "text": "Data",
+          "xmin": 3912,
+          "ymin": 2043,
+          "xmax": 4155,
+          "ymax": 2120
+        },
+        {
+          "text": "Science\"",
+          "xmin": 4197,
+          "ymin": 2038,
+          "xmax": 4653,
+          "ymax": 2121
+        }
+      ],
+      "raw_text": "Zevnolla Giulden Fi inal project on the subi iect \"Programmi ing for Data Science\" "
+    }
+  ]
+}
