@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 from streamlit_option_menu import option_menu
 import io
+import seaborn as sb
 
 # --------Import database--------
 not_clean_database = pd.read_csv("jobs_in_data.csv")
@@ -73,7 +74,7 @@ if selected == Exploring:
 
     st.write('We will work with this database, here link to [Kaggle](https://www.kaggle.com/datasets/hummaamqaasim/jobs-in-data/data)')
     st.write(f"**Database have {not_clean_database.shape[1]} columns and {not_clean_database.shape[0]} rows**")
- 
+
     #See first rows
     st.write(":green[**Let's see first 5 rows:**]")
     st.dataframe(not_clean_database.head())
@@ -157,6 +158,29 @@ if selected == Exploring:
     average_salary_per_year = not_clean_database[['work_year','salary_in_usd']].groupby('work_year').mean()
     st.dataframe(average_salary_per_year)
 
+    #correlation
+    st.write("**:green[Correlation of int in database:]**")
+
+    selected_columns_for_corr = not_clean_database[['work_year', 'salary', 'salary_in_usd']]
+    not_clean_database_corr = selected_columns_for_corr.corr() 
+    plt.figure(figsize=(8,6))
+    sb.heatmap(not_clean_database_corr, annot=True)
+    st.dataframe(not_clean_database_corr)
+
+    st.write("**:green[Correlation of salary and company size:]**")
+    company_salary_job_db = not_clean_database[['company_size', 'salary_in_usd','job_title']]
+    company_salary_job_db['job_title'] = company_salary_job_db['job_title'].astype('category').cat.codes
+    company_salary_job_db['company_size'] = company_salary_job_db['company_size'].astype('category').cat.codes
+    corr_of_company_salary = company_salary_job_db.corr()
+    fig, ax = plt.subplots(figsize=(8, 6))
+    sb.heatmap(corr_of_company_salary, annot=True, cmap='coolwarm', linewidths=.5, ax=ax)
+    ax.set_title('Correlation Chart: company_size,job_title and salary')
+    plt.xticks(rotation=45)
+    plt.yticks(rotation=0)
+    st.pyplot(fig)
+
+
+
 #i wrote it here because inside of "if" statement it will not work for another pages. I'm cleaning db here
 clean_database = not_clean_database.drop(columns=['salary', 'salary_currency'])
 usd_to_euro_exchange_rate = 0.92
@@ -171,6 +195,7 @@ european_union_countries = [
     'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden'
 ]
 european_union_db = clean_database[clean_database['company_location'].isin(european_union_countries)]
+european_union_db.reset_index(drop=True, inplace=True)
 
 
 # 2 page
@@ -198,26 +223,57 @@ if selected == Plots:
     st.subheader(Plots)
 
     # Pie type plot for showing salary per year in european countries
-    st.write("**:green[Average Salary Per Year]**")
-    fig, ax = plt.subplots()
-    european_union_db.groupby('work_year')['salary_in_euro'].mean().plot(kind='pie', autopct='%1.1f%%')
-    st.pyplot(fig)
+    aver_salary_button = st.button("**:green[Average Salary Per Year]**")
+
+    if aver_salary_button:
+        fig, ax = plt.subplots()
+        european_union_db.groupby('work_year')['salary_in_euro'].mean().plot(kind='pie', autopct='%1.1f%%')
+        st.pyplot(fig)
+    else:
+        st.empty()
 
     # Top Job Titles
-    st.write("**:green[Top 5 Job Titles]**")
-    fig, ax = plt.subplots(figsize=(6, 4))
-    top_job_titles = european_union_db['job_title'].value_counts().head(5)
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.bar(top_job_titles.index, top_job_titles.values, color='green')
-    ax.set_xlabel('Job Title')
-    ax.set_ylabel('Count')
-    ax.set_title('Top 5 Job Titles')
-    plt.xticks(rotation=45)
-    st.pyplot(fig)
+    top_eu_jobs_button = st.button("**:green[Top 5 Job Titles]**")
+
+    if top_eu_jobs_button:
+        fig, ax = plt.subplots(figsize=(6, 4))
+        top_job_titles = european_union_db['job_title'].value_counts().head(5)
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.bar(top_job_titles.index, top_job_titles.values, color='green')
+        ax.set_xlabel('Job Title')
+        ax.set_ylabel('Count')
+        ax.set_title('Top 5 Job Titles')
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
+    else:
+        st.empty()
+
+
 
 
 # 4 page
 if selected == Models:
     st.header('Research about :green[Jobs and Salaries in Data Science] ', divider='green')
     st.subheader(Models)
+
+    # find job for u
+    st.write("Let's find a work")
+
+    selected_title = st.selectbox('Select Job Title', not_clean_database['job_title'].unique())
+    selected_experience = st.selectbox('Select Experience Level', not_clean_database['experience_level'].unique())
+    selected_employment = st.selectbox('Select Employment Type', not_clean_database['employment_type'].unique())
+    selected_setting = st.selectbox('Select Work Setting', not_clean_database['work_setting'].unique())
+
+    # Filter the DataFrame based on user input
+    filtered_data = not_clean_database[
+        (not_clean_database['job_title'] == selected_title) &
+        (not_clean_database['experience_level'] == selected_experience) &
+        (not_clean_database['employment_type'] == selected_employment) &
+        (not_clean_database['work_setting'] == selected_setting)
+    ]
+    st.write('Available work in EU:')
+    st.dataframe(filtered_data)
+
+
+
 
