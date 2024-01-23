@@ -69,7 +69,7 @@ with st.sidebar:
 
 # 1 page
 if selected == Exploring:
-    st.header('Research about :green[Jobs and Salaries in Data Science] ', divider='green')
+    st.header('Research about :green[Jobs and Salaries in Data Science] 💶', divider='green')
     st.subheader(Exploring)
 
     st.write('We will work with this database, here link to [Kaggle](https://www.kaggle.com/datasets/hummaamqaasim/jobs-in-data/data)')
@@ -159,16 +159,8 @@ if selected == Exploring:
     st.dataframe(average_salary_per_year)
 
     #correlation
-    st.write("**:green[Correlation of int in database:]**")
-
-    selected_columns_for_corr = not_clean_database[['work_year', 'salary', 'salary_in_usd']]
-    not_clean_database_corr = selected_columns_for_corr.corr() 
-    plt.figure(figsize=(8,6))
-    sb.heatmap(not_clean_database_corr, annot=True)
-    st.dataframe(not_clean_database_corr)
-
-    st.write("**:green[Correlation of salary and company size:]**")
-    company_salary_job_db = not_clean_database[['company_size', 'salary_in_usd','job_title']]
+    st.write("**:green[Correlation in database:]**")
+    company_salary_job_db = not_clean_database[['work_year','company_size', 'salary_in_usd','job_title']]
     company_salary_job_db['job_title'] = company_salary_job_db['job_title'].astype('category').cat.codes
     company_salary_job_db['company_size'] = company_salary_job_db['company_size'].astype('category').cat.codes
     corr_of_company_salary = company_salary_job_db.corr()
@@ -200,8 +192,11 @@ european_union_db.reset_index(drop=True, inplace=True)
 
 # 2 page
 if selected == Cleaning:
-    st.header('Research about :green[Jobs and Salaries in Data Science] ', divider='green')
+    st.header('Research about :green[Jobs and Salaries in Data Science] 💶', divider='green')
     st.subheader(Cleaning)
+
+    st.write(":green[**Let's see not cleaned db:**]")
+    st.dataframe(not_clean_database)
 
     st.write("**:green[Let's remove some columns that we won't use: 'salary' , 'salary_in_usd' and 'salary_currency'. Since we did 'salary_in_euro', here is our new database:]**")
     st.dataframe(clean_database)
@@ -219,12 +214,11 @@ if selected == Cleaning:
 
 # 3 page
 if selected == Plots:
-    st.header('Research about :green[Jobs and Salaries in Data Science] ', divider='green')
+    st.header('Research about :green[Jobs and Salaries in Data Science] 💶', divider='green')
     st.subheader(Plots)
 
     # Pie type plot for showing salary per year in european countries
     aver_salary_button = st.button("**:green[Average Salary Per Year]**")
-
     if aver_salary_button:
         fig, ax = plt.subplots()
         european_union_db.groupby('work_year')['salary_in_euro'].mean().plot(kind='pie', autopct='%1.1f%%')
@@ -234,7 +228,6 @@ if selected == Plots:
 
     # Top Job Titles
     top_eu_jobs_button = st.button("**:green[Top 5 Job Titles]**")
-
     if top_eu_jobs_button:
         fig, ax = plt.subplots(figsize=(6, 4))
         top_job_titles = european_union_db['job_title'].value_counts().head(5)
@@ -248,31 +241,60 @@ if selected == Plots:
     else:
         st.empty()
 
+    # find job for u
+    st.write("Let's find a work")
+    selected_title = st.selectbox('Select Job Title', european_union_db['job_title'].unique())
+    selected_experience = st.selectbox('Select Experience Level', european_union_db['experience_level'].unique())
+    selected_employment = st.selectbox('Select Employment Type', european_union_db['employment_type'].unique())
+    selected_setting = st.selectbox('Select Work Setting', european_union_db['work_setting'].unique())
+    find_job_filter = european_union_db[
+        (european_union_db['job_title'] == selected_title) &
+        (european_union_db['experience_level'] == selected_experience) &
+        (european_union_db['employment_type'] == selected_employment) &
+        (european_union_db['work_setting'] == selected_setting)
+    ]
+
+    st.write('Available work in EU:')
+    st.dataframe(find_job_filter)
+    #salary for choosen jobs
+    plt.figure(figsize=(12, 6))
+    sb.boxplot(x='company_location', y='salary_in_euro', data=find_job_filter, palette="Greens")
+    plt.xticks(rotation=45)
+    plt.title('Distribution of Salaries by Country')
+    st.pyplot(plt)
+
+    # second version
+    plt.figure(figsize=(12, 6))
+    sb.barplot(x='company_location', y='salary_in_euro', data=find_job_filter, palette="Greens")
+    plt.title('Distribution of Salaries by Country(easy to understand)')
+    plt.xlabel('company_location')
+    plt.ylabel('Average Salary')
+    plt.xticks(rotation=45)
+    st.pyplot(plt)
+
+    # gegraphic
+    plt.figure(figsize=(12, 6))
+    sb.countplot(x='company_location', data=find_job_filter, order=find_job_filter['company_location'].value_counts().index, palette="Greens")
+    plt.xticks(rotation=45)
+    plt.title('Distribution of Jobs by Country')
+    st.pyplot(plt)
+    # Salary by company size
+    plt.figure(figsize=(12, 6))
+    sb.violinplot(x='company_size', y='salary_in_euro', data=find_job_filter, palette="Greens")
+    plt.title('Distribution of Salaries by company size')
+    plt.xlabel('Company size')
+    plt.ylabel('Salary')
+    st.pyplot(plt)
+ 
 
 
 
 # 4 page
 if selected == Models:
-    st.header('Research about :green[Jobs and Salaries in Data Science] ', divider='green')
+    st.header('Research about :green[Jobs and Salaries in Data Science] 💶', divider='green')
     st.subheader(Models)
 
-    # find job for u
-    st.write("Let's find a work")
 
-    selected_title = st.selectbox('Select Job Title', not_clean_database['job_title'].unique())
-    selected_experience = st.selectbox('Select Experience Level', not_clean_database['experience_level'].unique())
-    selected_employment = st.selectbox('Select Employment Type', not_clean_database['employment_type'].unique())
-    selected_setting = st.selectbox('Select Work Setting', not_clean_database['work_setting'].unique())
-
-    # Filter the DataFrame based on user input
-    filtered_data = not_clean_database[
-        (not_clean_database['job_title'] == selected_title) &
-        (not_clean_database['experience_level'] == selected_experience) &
-        (not_clean_database['employment_type'] == selected_employment) &
-        (not_clean_database['work_setting'] == selected_setting)
-    ]
-    st.write('Available work in EU:')
-    st.dataframe(filtered_data)
 
 
 
