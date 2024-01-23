@@ -43,6 +43,7 @@ def on_change(key):
     st.write(f"Selection changed to {selection}")
 
 # for easily change name of options 
+Readme = 'ReadMe file'
 Exploring = 'Exploring the dataset'
 Cleaning = 'Data set cleaning'
 Plots = 'Interesting plots'
@@ -51,8 +52,8 @@ Models = 'Models explaining the data'
 # Menu
 with st.sidebar:
     selected = option_menu(
-        None, [Exploring, Cleaning, Plots, Models], 
-        icons=['1-circle', '2-circle', '3-circle', '4-circle'],
+        None, [Readme, Exploring, Cleaning, Plots, Models], 
+        icons=['1-circle', '2-circle', '3-circle', '4-circle','5-circle'],
         menu_icon="none",
         default_index=0,
         manual_select=manual_select,
@@ -66,13 +67,16 @@ with st.sidebar:
         }
     ) 
     selected
-
+if selected == Readme:
+    with open("README.md", "r", encoding="utf-8") as file:
+        readme_file = file.read()
+        st.markdown(readme_file)
+    
 # 1 page
 if selected == Exploring:
     st.header('Research about :green[Jobs and Salaries in Data Science] 💶', divider='green')
     st.subheader(Exploring)
 
-    st.write('We will work with this database, here link to [Kaggle](https://www.kaggle.com/datasets/hummaamqaasim/jobs-in-data/data)')
     st.write(f"**Database have {not_clean_database.shape[1]} columns and {not_clean_database.shape[0]} rows**")
 
     #See first rows
