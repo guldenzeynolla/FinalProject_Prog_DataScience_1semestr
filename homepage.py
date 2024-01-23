@@ -297,6 +297,17 @@ if selected == Plots:
 if selected == Models:
     st.header('Research about :green[Jobs and Salaries in Data Science] 💶', divider='green')
     st.subheader(Models)
+    
+    grouped_data = european_union_db.groupby(['experience_level', 'job_title'])['salary_in_euro'].mean().unstack()
+    fig, ax = plt.subplots(figsize=(14, 8))
+    grouped_data.plot(kind='bar', ax=ax, colormap='viridis', legend=True)
+    plt.title('Average Salary depending on experience level and position')
+    plt.xlabel('experience level')
+    plt.ylabel('Average Salary in Euro')
+    plt.xticks(rotation=45)
+    plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
+    st.pyplot(fig)
+
 
 
 
